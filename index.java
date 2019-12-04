@@ -33,6 +33,11 @@ PImage [] title;//for startscreen
 PImage [] cactus;//for new best time
 PImage [] game_over; //for gameover
 
+String [] eng = new String[]{"LINE RACE", "Instructions", "Use arrows to move your flashing line to match the red line", "UP/DOWN Arrow Keys to change the y-intercept","LEFT/RIGHT Arrow Keys to change the slope", "You get 5 chances to get the best time.","e for English, m for Mohawk, c for Cayuga","Target Line:","Your Line:","Time: ", "You Got The New Best Time", "Old Best Time ", "Your New Best Time ", "You Did it", "Turns Left "}
+String [] cay;
+String [] moh = {"LINE", "Instru", "Use arrows to move", "UP/DOWN Arrow Keys to change","LEFT/RIGHT Arrow Keys ", "You get 5 chances to ","e for English, m for Mohawk, c for Cayuga","Target","Your ","Time: ", "You Got The ", "Old B", "Your New", "You Did it", "Turns Left "}; 
+
+String [] lang = eng;
 int frames = 0;//int used to indicate which frame of banana we are on
 int frameSkip = 2;
 //drawgrid example-----------------------------------------------------
@@ -64,7 +69,7 @@ void setup() {
 void init() {
 
   state = gameStart;   
-  reset();
+
   banana = new PImage[8];
   title = new PImage[11];
   game_over = new PImage[10];
@@ -88,6 +93,7 @@ void init() {
     cactus[i] = loadImage("/data/cactus"+i+".gif");
   }
   //print ("leaving init");
+    reset();
 }
 
 
@@ -154,6 +160,7 @@ void mouseClicked() {
     //state = instructions
     //else if over stateGame
     //reset();
+    startTime = millis();
     state = gameOn;
   } else if (state == gameWin) {
     turnsLeft --;
@@ -205,6 +212,12 @@ void checkKeys() {
   } else if (keyCode == RIGHT && keyPressed) {
     //decrease the slope of the line (rotation of line?)
     m -=  SLOPE_INCREMENT;
+  } else if (keyCode == e && keyPressed) {
+      lang = eng;
+  } else if (keyCode == m && keyPressed) {
+      lang = moh;
+  } else if (keyCode == c && keyPressed) {
+      lang = cay;
   }
 }
 
@@ -313,9 +326,9 @@ void newBestTime(float newTime) {
     frames = 0;
   }
   image(cactus[frames], width/2, height/2, width, height);
-  drawText("***You Got The New Best Time!!!***", width/2, (int)(height*0.25f), 80);
-  drawText("Old Best Time"+bestTime, width/2, (int)(height*0.35f), 50);
-  drawText("Your New Best Time"+newTime, width/2, (int)(height*0.45f), 50);
+  drawText("***"+lang[10]+"!!!***", width/2, (int)(height*0.25f), 80);
+  drawText(lang[11]+bestTime, width/2, (int)(height*0.35f), 50);
+  drawText(lang[12]+newTime, width/2, (int)(height*0.45f), 50);
   bestTime = newTime;
 }
 
@@ -337,10 +350,10 @@ void drawWin(float lowestTime) {
     textAlign(CENTER);
     image(banana[frames], width/2, height/2, height, height);
     //rect(buttonX+10*sin(0.5*frameCount), buttonY+20*pow(sin(0.25*frameCount+PI/2),2)-15, buttonW, buttonH);
-    drawText("***You Did it!!!***", width/2, (int)(height*0.25f), 80);
-    drawText("Best Time"+bestTime, width/2, (int)(height*0.35f), 50);
-    drawText("Your Time"+times[turnsLeft-1], width/2, (int)(height*0.45f), 50);
-    drawText("Turns Left "+turnsLeft, width/2, (int)(height*0.55f), 50);
+    drawText(lang[13], width/2, (int)(height*0.25f), 80);
+    drawText(lang[11]+bestTime, width/2, (int)(height*0.35f), 50);
+    drawText(lang[12]+times[turnsLeft-1], width/2, (int)(height*0.45f), 50);
+    drawText(lang[13]+turnsLeft, width/2, (int)(height*0.55f), 50);
   }
 }
 
@@ -370,12 +383,12 @@ void gameScreen() {
 
   drawLine(m, b, color(0, 0, 200), true);
   drawLine(randM, randB, color(200, 0, 0), false);
-  drawText("Target Line: y = "+randM+"x+"+randB, width/2 + 30, 40, 30);
-  drawText("Your Line: y = "+m+"x+"+b, 30, 40, 30);
+  drawText(lang[7]+" y = "+randM+"x+"+randB, width/2 + 30, 40, 30);
+  drawText(lang[8]+" y = "+m+"x+"+b, 30, 40, 30);
   currentTime = (int)((millis() - startTime)/100);
   currentTime /=10.;
   textAlign(CENTER);
-  drawText("Time: "+currentTime, width/2, 80, 30);
+  drawText(lang[9]+currentTime, width/2, 80, 30);
 }
 
 void draw() {
@@ -450,13 +463,14 @@ void startScreen() {
     //e.printStackTrace();
   }
 
-  drawText("***LINE RACE***", width/2, (int)(height*0.25), 80);
-  drawText("Instructions", width/2, (int)(height*0.55), 30);
+  drawText("***"+lang[0]+"***", width/2, (int)(height*0.25), 80);
+  drawText(lang[1], width/2, (int)(height*0.55), 30);
   drawText("--------------------------------------------", width/2, (int)(height*0.60), 30);
-  drawText("Use arrows to move your flashing line to match the red line", width/2, (int)(height*0.65), 30);
-  drawText("UP/DOWN Arrow Keys to change the y-intercept", width/2, (int)(height*0.70), 30);
-  drawText("LEFT/RIGHT Arrow Keys to change the slope", width/2, (int)(height*0.75), 30);
-  drawText("You get 5 chances to get the best time.", width/2, (int)(height*0.80), 30);
+  drawText(lang[2], width/2, (int)(height*0.65), 30);
+  drawText(lang[3], width/2, (int)(height*0.70), 30);
+  drawText(lang[4], width/2, (int)(height*0.75), 30);
+  drawText(lang[5], width/2, (int)(height*0.80), 30);
+  drawText(lang[6], width/2, (int)(height*0.85), 30);
 }
 
 
