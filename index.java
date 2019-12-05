@@ -33,13 +33,16 @@ PImage [] title;//for startscreen
 PImage [] cactus;//for new best time
 PImage [] game_over; //for gameover
 
-String [] eng = new String[]{"LINE RACE", "Instructions", "Use arrows to move your flashing line to match the red line", "UP/DOWN Arrow Keys to change the y-intercept","LEFT/RIGHT Arrow Keys to change the slope", "You get 5 chances to get the best time.","e for English, m for Mohawk, c for Cayuga","Target Line:","Your Line:","Time: ", "You Got The New Best Time", "Old Best Time ", "Your New Best Time ", "You Did it", "Turns Left "}
-String [] cay;
-String [] moh = {"LINE", "Instru", "Use arrows to move", "UP/DOWN Arrow Keys to change","LEFT/RIGHT Arrow Keys ", "You get 5 chances to ","e for English, m for Mohawk, c for Cayuga","Target","Your ","Time: ", "You Got The ", "Old B", "Your New", "You Did it", "Turns Left "}; 
+String [] eng = new String[]{"LINE RACE", "Instructions", "Use arrows to move your flashing line to match the red line", "UP/DOWN Arrow Keys to change the y-intercept","LEFT/RIGHT Arrow Keys to change the slope", "You get 5 chances to get the best time.","Press e for English, m for Mohawk, c for Cayuga to continue","Target Line:","Your Line:","Time: ", "You Got The New Best Time", "Old Best Time ", "Your New Best Time ", "You Did it", "Turns Left ", "Best Time", "Your Time", "Your Times"};
+
+String [] cay= new String[]{"CAYUGA TITLE", "InstructionsCay", "Use arrows to move your flashing line to match the red lineCay", "UP/DOWN Arrow Keys to change the y-interceptCay","LEFT/RIGHT Arrow Keys to change the slopeCay", "You get 5 chances to get the best time.Cay","Press e for English, m for Mohawk, c for Cayuga to continueCay","Target Line:Cay","Your Line:Cay","Time: Cay", "You Got The New Best TimeCay", "Old Best Time Cay", "Your New Best Time Cay", "You Did itCay", "Turns Left Cay", "Best TimeCay", "Your TimeCay", "Your Times"};
+
+String [] moh = new String[]{"MOHAWK TITLE", "MohInstructions", "Moh2Use arrows to move your flashing line to match the red line", "Moh3UP/DOWN Arrow Keys to change the y-intercept","Moh4LEFT/RIGHT Arrow Keys to change the slope", "Moh5You get 5 chances to get the best time.","Moh6Press e for English, m for Mohawk, c for Cayuga to continue","Moh7Target Line:","Moh8Your Line:","Moh9Time: ", "Moh10You Got The New Best Time", "Moh11Old Best Time ", "12Your New Best Time ", "Moh13You Did it", "Moh14Turns Left ", "Moh15Best Time", "Moh16Your Time", "Moh17Your Times"}; 
 
 String [] lang = eng;
 int frames = 0;//int used to indicate which frame of banana we are on
 int frameSkip = 2;
+
 //drawgrid example-----------------------------------------------------
 final float SLOPE_RESTRICTION = 5; 
 final float SLOPE_INCREMENT = 0.5;
@@ -96,7 +99,6 @@ void init() {
     reset();
 }
 
-
 void reset() {
   turnsLeft = 5;
   times = new float[turnsLeft];
@@ -105,24 +107,6 @@ void reset() {
   getRandomValues();
 }
 
-
-void gg() {
-  frames ++;
-  if (frames >= game_over.length) {
-    //set frames back to 0
-    frames = 0;
-  }
-  textAlign(CENTER);
-  image(game_over[frames], width/2, height/2, width, height);
-  drawText("***Best Time***", width/2, (int)(height*0.25f), 80);
-  drawText(""+bestTime, width/2, (int)(height*0.35f), 50);
-  drawText("Your Times", width/2, (int)(height*0.55f), 30);
-  drawText("--------------------------------------------", width/2, (int)(height*0.60f), 30);
-  for (int i = 0; i < times.length; i++) {
-    drawText(""+(i+1)+": "+times[i], width/2, (int)(height*(0.65f+(i*0.05f))), 30);
-  }
-  
-}
 
 void getRandomValues() {
   int max = (int)SLOPE_RESTRICTION; 
@@ -153,6 +137,7 @@ void getRandomValues() {
   startTime = millis();
   //print("leaving random values");
 }
+
 
 void mouseClicked() {
   if (state == gameStart) {
@@ -198,6 +183,7 @@ void drawCoolLine(float x1, float y1, float x2, float y2, color c) {
 }
 
 void checkKeys() {
+  //print("checkKeys");
   //using if statements check to see if the keys are pressed
   if (keyCode == UP && keyPressed) {
     //dec y-intercept variable b (the line will go up) 
@@ -212,13 +198,18 @@ void checkKeys() {
   } else if (keyCode == RIGHT && keyPressed) {
     //decrease the slope of the line (rotation of line?)
     m -=  SLOPE_INCREMENT;
-  } else if (keyCode == e && keyPressed) {
+  } else if (key == 'e' && keyPressed) {
+    
       lang = eng;
-  } else if (keyCode == m && keyPressed) {
+      //print("switching to eng");
+  } else if (key == 'm' && keyPressed) {
       lang = moh;
-  } else if (keyCode == c && keyPressed) {
+      //print("switching to moh");
+  } else if (key == 'c' && keyPressed) {
       lang = cay;
+      //print("switching to cay");
   }
+  
 }
 
 void checkBounds() {
@@ -262,7 +253,24 @@ void drawStats() {
   //list the turns left
 }
 
-
+void gg() {
+  frames ++;
+  if (frames >= game_over.length) {
+    //set frames back to 0
+    frames = 0;
+  }
+ 
+  textAlign(CENTER);
+  image(game_over[frames], width/2, height/2, width, height);
+  drawText("***"+lang[15]+"***", width/2, (int)(height*0.25f), 80);
+  drawText(""+bestTime, width/2, (int)(height*0.35f), 50);
+  drawText(lang[17], width/2, (int)(height*0.55f), 30);
+  drawText("--------------------------------------------", width/2, (int)(height*0.60f), 30);
+  for (int i = 0; i < times.length; i++) {
+    drawText(""+(i+1)+": "+times[i], width/2, (int)(height*(0.65f+(i*0.05f))), 30);
+  }
+  
+}
 
 void drawAxis() { 
   //draw lines 600 long at width /2 and height /2
@@ -350,10 +358,12 @@ void drawWin(float lowestTime) {
     textAlign(CENTER);
     image(banana[frames], width/2, height/2, height, height);
     //rect(buttonX+10*sin(0.5*frameCount), buttonY+20*pow(sin(0.25*frameCount+PI/2),2)-15, buttonW, buttonH);
+ 
     drawText(lang[13], width/2, (int)(height*0.25f), 80);
-    drawText(lang[11]+bestTime, width/2, (int)(height*0.35f), 50);
-    drawText(lang[12]+times[turnsLeft-1], width/2, (int)(height*0.45f), 50);
-    drawText(lang[13]+turnsLeft, width/2, (int)(height*0.55f), 50);
+    drawText(lang[15]+bestTime, width/2, (int)(height*0.35f), 50);
+    drawText(lang[16]+times[turnsLeft-1], width/2, (int)(height*0.45f), 50);
+    drawText(lang[14]+turnsLeft, width/2, (int)(height*0.55f), 50);
+ 
   }
 }
 
@@ -376,6 +386,24 @@ void drawLine(float _m, float _b, color col, boolean cool) {
   }
 }
 
+void startScreen() {
+  image(title[frames], width/2, height/2, width, height);
+  
+    // songs[0].loop();
+    // songs[0].play();
+
+
+  drawText("***"+lang[0]+"***", width/2, (int)(height*0.25), 80);
+  drawText(lang[1], width/2, (int)(height*0.55), 30);
+  drawText("--------------------------------------------", width/2, (int)(height*0.60), 30);
+  drawText(lang[2], width/2, (int)(height*0.65), 30);
+  drawText(lang[3], width/2, (int)(height*0.70), 30);
+  drawText(lang[4], width/2, (int)(height*0.75), 30);
+  drawText(lang[5], width/2, (int)(height*0.80), 30);
+  drawText(lang[6], width/2, (int)(height*0.40), 40);
+
+}
+
 void gameScreen() {
   background(200);
   //draw new frame
@@ -389,10 +417,13 @@ void gameScreen() {
   currentTime /=10.;
   textAlign(CENTER);
   drawText(lang[9]+currentTime, width/2, 80, 30);
+  
 }
 
 void draw() {
+  
   background(0);
+  
   //update stuff
   if (state == gameOn) {
     //update the new frames variables
@@ -450,29 +481,14 @@ void draw() {
     background(150, 0, 0);
     text("Oh no! Somehow I am in an incorrect state!", width/2, height/2);
   }
+  
   stroke(255);
+  //}
+  
 }
 
-void startScreen() {
-  image(title[frames], width/2, height/2, width, height);
-  try {
-    // songs[0].loop();
-    // songs[0].play();
-  }
-  catch(Exception e) {
-    //e.printStackTrace();
-  }
-
-  drawText("***"+lang[0]+"***", width/2, (int)(height*0.25), 80);
-  drawText(lang[1], width/2, (int)(height*0.55), 30);
-  drawText("--------------------------------------------", width/2, (int)(height*0.60), 30);
-  drawText(lang[2], width/2, (int)(height*0.65), 30);
-  drawText(lang[3], width/2, (int)(height*0.70), 30);
-  drawText(lang[4], width/2, (int)(height*0.75), 30);
-  drawText(lang[5], width/2, (int)(height*0.80), 30);
-  drawText(lang[6], width/2, (int)(height*0.85), 30);
-}
-
+/*
+*/
 
 /*
 void draw() {
