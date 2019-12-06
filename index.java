@@ -61,11 +61,21 @@ float b = 0;//user y int
 float randM = 0;//the random target slope
 float randB = 0;//the random target y int
 
+PVector mohPos;
+PVector engPos;
+PVector cayPos;
+PVector buttonSize;
+
 void setup() {
   size(600, 400);
   frameRate(15);
   textAlign(CENTER);
   imageMode(CENTER);
+  rectMode(CENTER);
+  mohPos = new PVector(width*0.25, height*0.4);
+  engPos = new PVector(width*0.5, height*0.4);
+  cayPos = new PVector(width*0.75, height*0.4);
+  buttonSize = new PVector(width*0.18, height*0.12);
   init();
 }
 
@@ -157,7 +167,7 @@ void mouseClicked() {
     }
   } else if (state == gameOver) {
     reset();
-    state = gameOn;
+    state = gameStart;
   } else {
    // print("WTF "+state, 100, 100);
   }
@@ -386,12 +396,57 @@ void drawLine(float _m, float _b, color col, boolean cool) {
   }
 }
 
+boolean checkButton(PVector pos, PVector siz, String lbl){
+  boolean hover = (abs(mouseX - pos.x)< siz.x)&&(abs(mouseY - pos.y)< siz.y);
+  if (hover){
+    fill(80,10,100);
+  }
+  else {
+    fill(0,200,200);
+  }
+  strokeWeight(height/80);
+  rect(pos.x, pos.y-height/100., siz.x, siz.y, height/50);
+  drawText(lbl, pos.x, pos.y, height/12.);
+  return hover;
+}
+
+
+
+void langButtons(){
+  /*fill(0,200,200);
+  strokeWeight(5);
+  rect(mohPos.x, mohPos.y-4, 100, 50, 8);
+  drawText("MOHAWK", mohPos.x, mohPos.y, 30);*/
+  if (checkButton(mohPos, buttonSize, "MOHAWK")){
+    lang = moh;
+  }
+  if (checkButton(engPos, buttonSize, "ENGLISH")){
+    lang = eng;
+  }
+  if (checkButton(cayPos, buttonSize, "CAYUGA")){
+    lang = cay;
+  }
+  
+  /*
+  fill(0,200,200);
+  strokeWeight(5);
+  rect(engPos.x, engPos.y-4, 100, 50, 8);
+  drawText("ENGLISH", engPos.x, engPos.y, 30);
+  fill(0,200,200);
+  strokeWeight(5);
+  rect(cayPos.x, cayPos.y-4, 100, 50, 8);
+  drawText("CAYUGA", cayPos.x, cayPos.y, 30);
+  */
+}
+
+
+
 void startScreen() {
   image(title[frames], width/2, height/2, width, height);
-  
+
     // songs[0].loop();
     // songs[0].play();
-
+  langButtons();
 
   drawText("***"+lang[0]+"***", width/2, (int)(height*0.25), 80);
   drawText(lang[1], width/2, (int)(height*0.55), 30);
@@ -400,7 +455,7 @@ void startScreen() {
   drawText(lang[3], width/2, (int)(height*0.70), 30);
   drawText(lang[4], width/2, (int)(height*0.75), 30);
   drawText(lang[5], width/2, (int)(height*0.80), 30);
-  drawText(lang[6], width/2, (int)(height*0.40), 40);
+  //drawText(lang[6], width/2, (int)(height*0.40), 40);
 
 }
 
