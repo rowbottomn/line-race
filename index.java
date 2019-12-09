@@ -1,4 +1,4 @@
-//Line Race
+ //Line Race
 /*Nathan Rowbottom
 Game for students to manipulate linear equations.
 Match you line to a random line.
@@ -22,10 +22,7 @@ int gameOn = 1;
 int gameWin = 2;
 int gameOver = 3;
 
-float buttonX = 250;
-float buttonY = 375;
-float buttonW = 100;
-float buttonH = 50;
+
 //animated image example-----------------------------------------------
 //pimage arrays to store the frames of animation
 PImage [] banana;//for win state
@@ -397,7 +394,7 @@ void drawLine(float _m, float _b, color col, boolean cool) {
 }
 
 boolean checkButton(PVector pos, PVector siz, String lbl){
-  boolean hover = (abs(mouseX - pos.x)< siz.x)&&(abs(mouseY - pos.y)< siz.y);
+  boolean hover = (abs(mouseX - pos.x)< siz.x/2)&&(abs(mouseY - pos.y)< siz.y/2);
   if (hover){
     fill(80,10,100);
   }
