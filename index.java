@@ -39,7 +39,7 @@ String [] moh = new String[]{"MOHAWK TITLE", "MohInstructions", "Moh2Use arrows 
 String [] lang = eng;
 int frames = 0;//int used to indicate which frame of banana we are on
 int frameSkip = 2;
-
+boolean yint = false;//to hold whether you can see the y int or not
 //drawgrid example-----------------------------------------------------
 final float SLOPE_RESTRICTION = 5; 
 final float SLOPE_INCREMENT = 0.5;
@@ -165,6 +165,7 @@ void mouseClicked() {
   } else if (state == gameOver) {
     reset();
     state = gameStart;
+    yint = true;
   } else {
    // print("WTF "+state, 100, 100);
   }
@@ -176,9 +177,20 @@ void drawText(String msg, int x, int y, int siz) {
   textSize(siz*0.5);
 
   fill(150, 100, 20);
-  text(msg, x-2, y-2, siz);
+  text(msg, x-1, y-1, siz);
   fill(250, 250, 250);
   text(msg, x, y, siz);
+}
+
+//custom function
+void drawText(String msg, int x, int y, int siz, color col) {
+  textSize(siz*0.5);
+
+  fill(150);
+  text(msg, x-1, y-1, siz);
+  fill(col, 200);
+  text(msg, x, y, siz);
+ fill(150, 100, 20);
 }
 
 void drawCoolLine(float x1, float y1, float x2, float y2, color c) { 
@@ -375,7 +387,6 @@ void drawWin(float lowestTime) {
 }
 
 
-
 void drawLine(float _m, float _b, color col, boolean cool) {
   strokeWeight(5);
   float x_i = -width/2;//left most x value
@@ -387,9 +398,13 @@ void drawLine(float _m, float _b, color col, boolean cool) {
   //draw line from first point to final point
   if (cool) {
     drawCoolLine( x_i+width/2, y_i+height/2, x_f+width/2, y_f+height/2, col);
+    
   } else {
     stroke(col);
     line(x_i+width/2, y_i+height/2, x_f+width/2, y_f+height/2);
+  }
+  if (yint){
+    ellipse(width/2, height/2 -_b, 15, 15);
   }
 }
 
@@ -460,13 +475,14 @@ void gameScreen() {
   background(200);
   //draw new frame
   drawAxis();
-
-  drawLine(m, b, color(0, 0, 200), true);
-  drawLine(randM, randB, color(200, 0, 0), false);
-  drawText(lang[7]+" y = "+randM+"x+"+randB, width/2 + 30, 40, 30);
-  drawText(lang[8]+" y = "+m+"x+"+b, 30, 40, 30);
-  currentTime = (int)((millis() - startTime)/100);
-  currentTime /=10.;
+  yourCol = color(0, 0, 200);
+  targetCol = color(200, 0, 0);
+  drawLine(m, b, yourCol, true);
+  drawLine(randM, randB, targetCol, false);
+  drawText(lang[7]+" y = "+randM+"x+"+randB, width/2 + 30, 40, 30, targetCol);
+  drawText(lang[8]+" y = "+m+"x+"+b, 30, 40, 30, yourCol);
+  currentTime = (int)((millis() - startTime)/1);
+  currentTime /=1000.;
   textAlign(CENTER);
   drawText(lang[9]+currentTime, width/2, 80, 30);
   
