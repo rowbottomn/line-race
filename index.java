@@ -17,11 +17,11 @@ change representation of grid.
 //global variables
 //states example------------------------------------------------------
 int state = 0;
-int gameStart = 0;
-int gameOn = 1;
-int gameWin = 2;
-int gameOver = 3;
-
+final int gameStart = 0;
+final int gameOn = 1;
+final int gameWin = 2;
+final int gameOver = 3;
+final int chooseGame = 4;
 
 //animated image example-----------------------------------------------
 //pimage arrays to store the frames of animation
