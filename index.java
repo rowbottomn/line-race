@@ -4,9 +4,16 @@ Game for students to manipulate linear equations.
 Match you line to a random line.
 Times are tracked
 Modified November 28th 2019 to go on Repl.it live as processing.js
+Show visual representation of y-intercept
+Added buttons for languages
+Added language support
+
+
 TODO
 Sound
-Show visual representation of y-intercept
+Adding different modes as progression
+Show y intercept as point notation
+
 
 ISSUES
 frameSkip does nothing so remove it or implement it
@@ -17,12 +24,12 @@ change representation of grid.
 //global variables
 //states example------------------------------------------------------
 int state = 0;
-final int gameStart = 0;
-final int gameOn = 1;
-final int gameWin = 2;
-final int gameOver = 3;
-final int chooseGame = 4;
-
+int gameStart = 0;
+int gameOn = 1;
+int gameWin = 2;
+int gameOver = 3;
+int chooseGame = 4;
+int numGames = 0;
 //animated image example-----------------------------------------------
 //pimage arrays to store the frames of animation
 PImage [] banana;//for win state
@@ -39,7 +46,7 @@ String [] moh = new String[]{"MOHAWK TITLE", "MohInstructions", "Moh2Use arrows 
 String [] lang = eng;
 int frames = 0;//int used to indicate which frame of banana we are on
 int frameSkip = 2;
-boolean yint = false;//to hold whether you can see the y int or not
+
 //drawgrid example-----------------------------------------------------
 final float SLOPE_RESTRICTION = 5; 
 final float SLOPE_INCREMENT = 0.5;
@@ -63,8 +70,12 @@ PVector engPos;
 PVector cayPos;
 PVector buttonSize;
 
+boolean targetLineVisible = true;
+boolean myLineVisible = true;
+boolean yint = true;//to hold whether you can see the y int or not
+
 void setup() {
-  size(600, 400);
+  size(900, 600);
   frameRate(15);
   textAlign(CENTER);
   imageMode(CENTER);
@@ -74,6 +85,7 @@ void setup() {
   cayPos = new PVector(width*0.75, height*0.4);
   buttonSize = new PVector(width*0.18, height*0.12);
   init();
+  
 }
 
 void init() {
@@ -102,6 +114,7 @@ void init() {
     //load the images into to the array
     cactus[i] = loadImage("/data/cactus"+i+".gif");
   }
+  numGames = 0
   //print ("leaving init");
     reset();
 }
@@ -112,6 +125,28 @@ void reset() {
   startTime = millis();
   //print (startTime);
   getRandomValues();
+  if (numGames == 0){
+    targetLineVisible = true;
+    myLineVisible = true;
+    yint = true;
+  }
+  else if (numGames == 1){
+    targetLineVisible =false;
+    myLineVisible = true;
+    yint = true;
+
+  }
+  else if (numGames == 2){
+    targetLineVisible =true;
+    myLineVisible = false;
+    yint = true;
+  }
+  else {
+    targetLineVisible = true;
+    myLineVisible = true;
+    yint = true;
+  }
+  numGames++;
 }
 
 
@@ -404,7 +439,9 @@ void drawLine(float _m, float _b, color col, boolean cool) {
     line(x_i+width/2, y_i+height/2, x_f+width/2, y_f+height/2);
   }
   if (yint){
+    
     ellipse(width/2, height/2 -_b, 15, 15);
+    drawText("(0, "+_b+")", width/2 + 20, height/2 -_b, 20);
   }
 }
 
@@ -477,12 +514,17 @@ void gameScreen() {
   drawAxis();
   yourCol = color(0, 0, 200);
   targetCol = color(200, 0, 0);
-  drawLine(m, b, yourCol, true);
-  drawLine(randM, randB, targetCol, false);
+  if (myLineVisible){
+    drawLine(m, b, yourCol, true);
+  }
+  
+  if (targetLineVisible){
+    drawLine(randM, randB, targetCol, false);
+  }
   drawText(lang[7]+" y = "+randM+"x+"+randB, width/2 + 30, 40, 30, targetCol);
   drawText(lang[8]+" y = "+m+"x+"+b, 30, 40, 30, yourCol);
   currentTime = (int)((millis() - startTime)/1);
-  currentTime /=1000.;
+  currentTime /= 1000.;
   textAlign(CENTER);
   drawText(lang[9]+currentTime, width/2, 80, 30);
   
